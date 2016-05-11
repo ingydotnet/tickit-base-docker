@@ -7,12 +7,12 @@ set -x
   finalize=${1:?"First argument must be true or false"}
 
   apks="build-base bzr git libtool ncurses-dev"
-  apks_dev="ruby vim"
+  apks_dev="bash ruby vim"
 
   apk add --update $apks
 
   if ! $finalize; then
-    apk add bash $apks_dev
+    apk add $apks_dev
     gem install gist || true
   fi
 
