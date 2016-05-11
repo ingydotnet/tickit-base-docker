@@ -4,15 +4,15 @@ set -e
 set -x
 
 (
-  finalize=${1:-false}
+  finalize=${1:?"First argument must be true or false"}
 
   apks="build-base bzr git libtool ncurses-dev"
-  apks_dev="bash ruby vim"
+  apks_dev="ruby vim"
 
   apk add --update $apks
 
   if ! $finalize; then
-    apk add $apks_dev
+    apk add bash $apks_dev
     gem install gist || true
   fi
 
@@ -27,7 +27,6 @@ set -x
     cd libtermkey-0.18
     make install
   )
-  rm -fr /libtermkey
 
   git clone https://github.com/mauke/unibilium
   (
@@ -37,20 +36,22 @@ set -x
     mv /tmp/maint.mk ./
     make install
   )
-  rm -fr /unibilium
 
   bzr branch lp:libtickit
   (
     cd /libtickit
     make install
   )
-  rm -fr /libtickit
 
   if $finalize; then
     apk del $apks
     apk del $apks_dev
     rm -fr /var/cache/apk/*
-    rm -f /build.sh docker-build.log
+    rm -f /build.sh /docker-build.log
+
+    rm -fr /libtermkey*
+    rm -fr /unibilium
+    rm -fr /libtickit
   fi
 
   du -sh /
