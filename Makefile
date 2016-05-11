@@ -1,11 +1,18 @@
 NAME := termui/tickit-base
 VERSION := 0.0.1
+TAG := $(NAME):$(VERSION)
 
 build:
-	docker build -t $(NAME) .
+	docker build -t $(TAG) .
 
-push: build
-	docker push $(NAME):$(VERSION)
+dev:
+	docker build -t $(TAG) -f Dockerfile.dev .
 
-shell: build
-	docker run -it -v $$PWD:/src --entrypoint /bin/bash $(NAME)
+push: clean build
+	docker push $(TAG)
+
+shell:
+	docker run -it -v $$PWD:/src --entrypoint /bin/bash $(TAG)
+
+clean:
+	docker rmi -f $(TAG) || true
