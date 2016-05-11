@@ -1,10 +1,11 @@
 NAME := termui/tickit-base
+VERSION := 0.0.1
 
 build:
 	docker build -t $(NAME) .
 
-shell: build
-	docker run -it -v $$PWD:/devel --entrypoint /bin/bash $(NAME)
-
 push: build
-	docker push $(NAME)
+	docker push $(NAME):$(VERSION)
+
+shell: build
+	docker run -it -v $$PWD:/src --entrypoint /bin/bash $(NAME)
