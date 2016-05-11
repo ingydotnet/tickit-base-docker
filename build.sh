@@ -46,7 +46,9 @@ set -x
   if $finalize; then
     apk del $apks
     apk del $apks_dev
+    apk del openssl || true
     rm -fr /var/cache/apk/*
+
     rm -f /build.sh /docker-build.log
 
     rm -fr /libtermkey*
